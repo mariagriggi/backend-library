@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  nome          String
+  email         String   @unique
+  endereco      String
+  telefone      String
+  data_cadastro DateTime @default(now())
+
+  emprestimos   Emprestimo[]
+  multas        Multa[]
+}
+
+model Livro {
+  id_livro          String   @id @default(auto()) @map("_id") @db.ObjectId
+  titulo            String
+  autor             String
+  categoria         String
+  data_publicacao   String
+  quantidade_estoque Int
+  isbn              String   @unique
+
+  emprestimos       Emprestimo[]
+}
+
+model Categoria {
+  id_categoria   String  @id @default(auto()) @map("_id") @db.ObjectId
+  nome_categoria String
+  descricao      String
+}
+
+model Emprestimo {
+  id_emprestimo          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_usuario             String   @db.ObjectId
+  id_livro               String   @db.ObjectId
+  data_emprestimo        DateTime @default(now())
+  data_devolucao_prevista DateTime
+  data_devolucao_real    DateTime?
+
+  usuario User  @relation(fields: [id_usuario], references: [id])
+  livro   Livro @relation(fields: [id_livro], references: [id_livro])
+  multas  Multa[]
+}
+
+model Multa {
+  id_multa       String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_usuario     String   @db.ObjectId
+  id_emprestimo  String   @db.ObjectId
+  valor_multa    Float
+  data_multa     DateTime @default(now())
+
+  usuario    User       @relation(fields: [id_usuario], references: [id])
+  emprestimo Emprestimo @relation(fields: [id_emprestimo], references: [id_emprestimo])
+}
+
