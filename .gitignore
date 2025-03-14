@@ -3,7 +3,7 @@ node_modules
 .env
 logs/
 npm-debug.log
-eval "$(ssh-agent -s)'
+eval "$(ssh-agent -s)"
 eval "$(ssh-agent -s)".pub
 
 
