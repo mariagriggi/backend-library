@@ -7,7 +7,7 @@ const prisma = new PrismaClient()
 
 app.use(express.json())
 app.use(cors());
-app.use(express.json())
+
 
 const users = []
 
@@ -108,11 +108,12 @@ app.post('/livro', async (req, res) => {
                 titulo: req.body.titulo,
                 autor: req.body.autor,
                 categoria: req.body.categoria,
-                data_publicacao: req.body.data_publicacao,
-                quantidade_estoque: req.body.quantidade_estoque,
+                data_publicacao: req.body.data_publicacao, // Enviar diretamente como string
+                quantidade_estoque: Number(req.body.quantidade_estoque), // Converte para número
                 isbn: req.body.isbn,
             }
         });
+        
         res.status(201).json(novoLivro);
     } catch (error) {
         res.status(400).json({ erro: 'Erro ao criar livro', detalhes: error.message });

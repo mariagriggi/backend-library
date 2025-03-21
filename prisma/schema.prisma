@@ -32,7 +32,7 @@ model Livro {
   categoria         String
   data_publicacao   String
   quantidade_estoque Int
-  isbn              String   @unique
+  isbn              String
 
   emprestimos       Emprestimo[]
 }
